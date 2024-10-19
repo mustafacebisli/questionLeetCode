@@ -1,5 +1,7 @@
 package Question33Sum;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,30 +22,40 @@ public class Sum3 {
 	//  0,
 	
 	
-	public static List<List<In0teger>> threeSum(int[] nums) {
-        
-		HashSet<Integer> numsPozitif = new HashSet<Integer>();
-		HashSet<Integer> numsNegatif = new HashSet<Integer>();
-		boolean isThereAZero = false;
-		
-		for (int i = 0; i < nums.length; i++) {
-			if(nums[i] > 0) {
-				numsPozitif.add(nums[i]);
-			}
-			else if(nums[i] < 0) {
-				numsPozitif.add(nums[i]);
-			}
-			else
-				isThereAZero = true;
-		}
-		
-		for (Iterator iterator = numsPozitif.iterator(); iterator.hasNext();) {
-			
-		}
-		
-		
-		
-		return int[] {1,2};
+	//2 li pointer kullanımı için güzel bir örnek 
+	//Algoritma. -> Bir target belirleniyor öncelikle. ardından kalan diğer iki sayı twoSum methodu ile bulunuyor. Bulunma esnasında j'nin yer değiştirmesi kodun çok uzun bir requestte bile hızlı çalışmasına olanak sağlıyor.
+	//tabi bu işlemleri daha hızlı yapmak ve aramayı kolaylaştırmak amaçlı önce diziyi sıralıyor.
+	public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        int len = nums.length;
+        int l=0;
+        for(int i=0; i<len-2 && nums[i]<=0; i++) {
+            if(i!=0 && nums[i-1]==nums[i]) continue;
+            twoSum(-nums[i], i+1, nums, res);
+        }
+            
+        return res;
+    }
+
+    private void twoSum(int target, int j, int[] numsArr , List<List<Integer>> result) {
+        int k = numsArr.length-1;
+        while(j < k) {
+            if(numsArr[j] + numsArr[k] > target) {
+                k--;
+                continue;
+            } 
+            if (numsArr[j] + numsArr[k] < target) {
+                j++;
+                continue;
+            } 
+            
+            result.add(Arrays.asList(-target, numsArr[j], numsArr[k]));
+            j++;
+            k--;
+
+            while(j<k && numsArr[j]==numsArr[j-1]) j++; //j nin aynı sayı olma durumunu kontrol ediyor.
+        }
     }
 
 }
